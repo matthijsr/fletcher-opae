@@ -36,7 +36,7 @@ RUN mkdir -p /ofs-platform-afu-bbb && \
     ./plat_if_release/update_release.sh $OPAE_PLATFORM_ROOT
 
 # Open Programmable Acceleration Engine
-ARG OPAE_VERSION=2.0.1-2
+ARG OPAE_VERSION=2.1.0-2
 RUN yum install -y git cmake3 make gcc gcc-c++ json-c-devel libuuid-devel hwloc-devel python3-devel glibc-devel && \
     git clone --single-branch --branch release/${OPAE_VERSION} https://github.com/OPAE/opae-sdk.git /opae-sdk && \
     mkdir -p /opae-sdk/build && \
@@ -87,7 +87,7 @@ RUN git clone --recursive --single-branch -b ${FLETCHER_VERSION} https://github.
 ENV FLETCHER_HARDWARE_DIR=/fletcher/hardware
 
 # Fletcher plaform support for OPAE
-ARG FLETCHER_OPAE_VERSION=0.2.2
+ARG FLETCHER_OPAE_VERSION=0.2.3
 RUN mkdir -p /fletcher-opae && \
     curl -L https://github.com/matthijsr/fletcher-opae/archive/${FLETCHER_OPAE_VERSION}.tar.gz | tar xz -C /fletcher-opae --strip-components=1 && \
     cd /fletcher-opae && \
