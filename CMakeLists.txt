@@ -30,7 +30,7 @@ endif()
 
 FetchContent_Declare(opae-c
   GIT_REPOSITORY  https://github.com/opae/opae-libs.git
-  GIT_TAG         release/2.1.0-2
+  GIT_TAG         2.1.0-2
 )
 if(NOT opae-c_POPULATED)
   FetchContent_Populate(opae-c)
