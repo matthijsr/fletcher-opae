@@ -64,10 +64,10 @@ add_compile_unit(
     C_STANDARD 99
     COMPILE_DEFINITIONS ASE
   SRCS
+    ${OPAE_LIB_SOURCE}/libopae-c/init_ase.c
     src/fletcher_opae.c
   DEPS
     fletcher::c
-    ${OPAE_LIB_SOURCE}/libopae-c/init_ase.c
     opae-c
 )
 
