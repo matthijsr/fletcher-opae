@@ -50,7 +50,8 @@ RUN yum install -y \
         gcc-c++ \
         git \
         libedit-devel \
-        epel-release
+        epel-release \
+        glibc-devel
 
 RUN yum install -y \
         libudev-devel \

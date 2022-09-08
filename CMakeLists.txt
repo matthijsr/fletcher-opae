@@ -29,7 +29,7 @@ if(NOT fletcher_POPULATED)
 endif()
 
 FetchContent_Declare(opae-c
-  GIT_REPOSITORY  https://github.com/opae/opae-libs.git
+  GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
   GIT_TAG         2.1.0-2
 )
 if(NOT opae-c_POPULATED)
