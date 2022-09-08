@@ -67,7 +67,8 @@ add_compile_unit(
     src/fletcher_opae.c
   DEPS
     fletcher::c
-    opae-c-ase
+    ${OPAE_LIB_SOURCE}/libopae-c/init_ase.c
+    opae-c
 )
 
 compile_units()
