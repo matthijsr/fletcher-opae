@@ -35,10 +35,48 @@ RUN mkdir -p /ofs-platform-afu-bbb && \
     cd /ofs-platform-afu-bbb/ && \
     ./plat_if_release/update_release.sh $OPAE_PLATFORM_ROOT
 
+# Dev/Build requirements
+RUN yum install -y \
+        python3 \
+        python3-pip \
+        python3-devel \
+        python3-wheel \
+        python3-pybind11 \
+        make \
+        libuuid-devel \
+        json-c-devel \
+        gcc \
+        clang \
+        gcc-c++ \
+        git \
+        libedit-devel \
+        epel-release
+
+RUN yum install -y \
+        libudev-devel \
+        libcap-devel \
+        cmake3 \
+        openssl11-devel
+
+RUN /usr/bin/python3 -m pip install setuptools --upgrade --prefix /usr
+RUN /usr/bin/python3 -m pip install pyyaml jsonschema --prefix=/usr
+
+# hwloc
+RUN yum install -y hwloc-devel
+
+# Intel TBB
+ARG TBB_VERSION=v2021.5.0
+RUN git clone -b ${TBB_VERSION} --single-branch https://github.com/oneapi-src/oneTBB.git /tbb && \
+    mkdir -p /tbb/build && \
+    cd /tbb/build && \
+    cmake3 -DCMAKE_INSTALL_PREFIX=/usr -DTBB_TEST=OFF .. && \
+    cmake3 --build . && \
+    cmake3 --install . && \
+    rm -rf /tbb
+
 # Open Programmable Acceleration Engine
 ARG OPAE_VERSION=2.1.0-2
-RUN yum install -y git cmake3 make gcc gcc-c++ json-c-devel libuuid-devel hwloc-devel python3-devel glibc-devel && \
-    git clone -b ${OPAE_VERSION} --single-branch https://github.com/OPAE/opae-sdk.git /opae-sdk && \
+RUN git clone -b ${OPAE_VERSION} --single-branch https://github.com/OPAE/opae-sdk.git /opae-sdk && \
     mkdir -p /opae-sdk/build && \
     cd /opae-sdk/build && \
     cmake3 \
@@ -47,9 +85,8 @@ RUN yum install -y git cmake3 make gcc gcc-c++ json-c-devel libuuid-devel hwloc-
     -DOPAE_BUILD_LIBOPAE_PY=On \
     -DOPAE_BUILD_LIBOPAEVFIO=Off \
     -DOPAE_BUILD_PLUGIN_VFIO=Off \
-    -DOPAE_BUILD_LIBOPAEUIO=Off \
-    -DOPAE_BUILD_EXTRA_TOOLS=On \
-    -DCMAKE_INSTALL_PREFIX=/usr /opae-sdk && \
+    -DOPAE_BUILD_EXTRA_TOOLS=On  \
+	-DCMAKE_INSTALL_PREFIX=/usr /opae-sdk && \
     make -j && \
     make install && \
     rm -rf /opae-sdk
@@ -65,9 +102,6 @@ RUN mkdir -p /intel-fpga-bbb/build && \
     make install
 
 ENV FPGA_BBB_CCI_SRC /intel-fpga-bbb
-
-# Intel TBB
-RUN curl -L https://github.com/oneapi-src/oneTBB/releases/download/v2020.3/tbb-2020.3-lin.tgz | tar xz -C /usr --strip-components=1
 
 # Fletcher runtime
 ARG FLETCHER_VERSION=0.0.20
