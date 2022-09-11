@@ -20,8 +20,8 @@ FetchContent_Declare(cmake-modules
 FetchContent_MakeAvailable(cmake-modules)
 
 FetchContent_Declare(fletcher
-  GIT_REPOSITORY  https://github.com/abs-tudelft/fletcher.git
-  GIT_TAG         0.0.20
+  GIT_REPOSITORY  https://github.com/matthijsr/fletcher.git
+  GIT_TAG         0.0.22
 )
 if(NOT fletcher_POPULATED)
   FetchContent_Populate(fletcher)
@@ -30,7 +30,7 @@ endif()
 
 FetchContent_Declare(opae-c
   GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
-  GIT_TAG         2.1.0-2
+  GIT_TAG         76db48ba3c702185a69663ffe831ee191672b003
 )
 if(NOT opae-c_POPULATED)
   FetchContent_Populate(opae-c)
@@ -67,7 +67,7 @@ add_compile_unit(
     src/fletcher_opae.c
   DEPS
     fletcher::c
-    opae-c
+    opae-c-ase
 )
 
 compile_units()
@@ -110,16 +110,16 @@ set(CPACK_PACKAGE_RELOCATABLE ON)
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_DEBIAN_LIBRARY_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
 set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
-set(CPACK_DEBIAN_LIBRARY_PACKAGE_DEPENDS "fletcher (>= 0.0.20), opae-libs (>= 2.1.0)")
-set(CPACK_DEBIAN_ASE_PACKAGE_DEPENDS "fletcher (>= 0.0.20), opae-ase (>= 2.1.0)")
+set(CPACK_DEBIAN_LIBRARY_PACKAGE_DEPENDS "fletcher (>= 0.0.22), opae-libs (>= 2.2.0)")
+set(CPACK_DEBIAN_ASE_PACKAGE_DEPENDS "fletcher (>= 0.0.20), opae-ase (>= 2.0.10)")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR}")
 
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 set(CPACK_RPM_FILE_NAME "RPM-DEFAULT")
 set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
 set(CPACK_RPM_PACKAGE_LICENSE "ASL 2.0")
-set(CPACK_RPM_LIBRARY_PACKAGE_REQUIRES "fletcher >= 0.0.20, opae-libs >= 2.1.0")
-set(CPACK_RPM_ASE_PACKAGE_REQUIRES "fletcher >= 0.0.20, opae-ase >= 2.1.0")
+set(CPACK_RPM_LIBRARY_PACKAGE_REQUIRES "fletcher >= 0.0.20, opae-libs >= 2.2.0")
+set(CPACK_RPM_ASE_PACKAGE_REQUIRES "fletcher >= 0.0.20, opae-ase >= 2.0.10")
 
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 set(CPACK_ARCHIVE_LIBRARY_FILE_NAME "${CMAKE_PROJECT_NAME}-${fletcher_opae_VERSION}-${CMAKE_SYSTEM_NAME}")
