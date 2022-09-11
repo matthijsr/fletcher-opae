@@ -18,7 +18,7 @@ RUN mkdir -p /fletcher && \
     rm -rf /fletcher
 
 # Fletcher hardware libs
-RUN git clone --recursive --single-branch -b ${FLETCHER_VERSION} https://github.com/abs-tudelft/fletcher /fletcher
+RUN git clone --recursive --single-branch -b ${FLETCHER_VERSION} https://github.com/matthijsr/fletcher /fletcher
 ENV FLETCHER_HARDWARE_DIR=/fletcher/hardware
 
 # Install vhdmmio
