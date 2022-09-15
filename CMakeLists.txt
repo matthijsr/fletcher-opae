@@ -28,16 +28,29 @@ if(NOT fletcher_POPULATED)
   add_subdirectory(${fletcher_SOURCE_DIR}/common/c ${fletcher_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
-FetchContent_Declare(opae-c
-  GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
-  GIT_TAG         76db48ba3c702185a69663ffe831ee191672b003
-)
+if(BUILD_FLETCHER_OPAE-ASE)
+  FetchContent_Declare(opae-c
+    GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
+    GIT_TAG         76db48ba3c702185a69663ffe831ee191672b003
+  )
+  FetchContent_Declare(opae-c-ase
+    GIT_REPOSITORY  https://github.com/opae/opae-sim.git
+    GIT_TAG         f8e7bd5e876a5b913fb53d6fc85653211eb7af3f
+  )
+else()
+  FetchContent_Declare(opae-c
+    GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
+    GIT_TAG         2.0.11-1
+  )
+endif()
 if(NOT opae-c_POPULATED)
   FetchContent_Populate(opae-c)
-  set(OPAE_BUILD_LIBOPAE_CXX OFF CACHE BOOL "")
-  set(OPAE_BUILD_LIBOPAE_PY OFF CACHE BOOL "")
-  set(OPAE_BUILD_SIM ON CACHE BOOL "")
-  add_subdirectory(${opae-c_SOURCE_DIR} ${opae-c_BINARY_DIR} EXCLUDE_FROM_ALL)
+  set(OPAE_BUILD_SIM OFF CACHE BOOL "")
+  # add_subdirectory(${opae-c_SOURCE_DIR} ${opae-c_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+if(BUILD_FLETCHER_OPAE-ASE AND NOT opae-c-ase_POPULATED)
+  FetchContent_Populate(opae-c-ase)
+  add_subdirectory(${opae-c-ase_SOURCE_DIR} ${opae-c-ase_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
 include(CompileUnits)
@@ -67,6 +80,7 @@ add_compile_unit(
     src/fletcher_opae.c
   DEPS
     fletcher::c
+    opae-c
     opae-c-ase
 )
 
@@ -118,8 +132,9 @@ set(CPACK_RPM_COMPONENT_INSTALL ON)
 set(CPACK_RPM_FILE_NAME "RPM-DEFAULT")
 set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}")
 set(CPACK_RPM_PACKAGE_LICENSE "ASL 2.0")
-set(CPACK_RPM_LIBRARY_PACKAGE_REQUIRES "fletcher >= 0.0.20, opae-libs >= 2.2.0")
-set(CPACK_RPM_ASE_PACKAGE_REQUIRES "fletcher >= 0.0.20, opae-ase >= 2.0.10")
+set(CPACK_RPM_ASE_PACKAGE_REQUIRES "fletcher >= 0.0.22, opae-libs >= 2.2.0")
+set(CPACK_RPM_ASE_PACKAGE_REQUIRES "fletcher >= 0.0.22, opae-ase >= 2.0.10")
+set(CPACK_RPM_LIBRARY_PACKAGE_REQUIRES "fletcher >= 0.0.22, opae-libs >= 2.0.11")
 
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 set(CPACK_ARCHIVE_LIBRARY_FILE_NAME "${CMAKE_PROJECT_NAME}-${fletcher_opae_VERSION}-${CMAKE_SYSTEM_NAME}")

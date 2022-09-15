@@ -6,10 +6,13 @@ RUN dnf install -y dnf-plugins-core && \
     dnf config-manager --enable epel 
 
 # Dev/Build requirements
-RUN dnf install -y python3 python3-pip python3-devel python3-pybind11 cmake make libuuid-devel json-c-devel gcc clang gcc-c++ hwloc-devel tbb-devel rpm-build rpmdevtools git
+RUN dnf install -y python39 python39-pip python39-devel cmake make libuuid-devel json-c-devel gcc clang gcc-c++ hwloc-devel tbb-devel rpm-build rpmdevtools git
 RUN dnf install -y libedit-devel
 RUN dnf install -y libudev-devel
 RUN dnf install -y libcap-devel
+
+# Python 3.9
+RUN alternatives --set python3 /usr/bin/python3.9
 
 RUN python3 -m pip install --user \
         jsonschema \
@@ -48,6 +51,8 @@ RUN mkdir -p /installer && \
 ENV MTI_HOME /opt/intelFPGA_pro/quartus_19.2.0b57/modelsim_ase
 ENV QUESTA_HOME "${MTI_HOME}"
 ENV PATH "${MTI_HOME}/bin:${PATH}"
+
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Platform Interface Manager
 ARG OFS_REF=2dde2f3f8ad3070694d7ca26e93056f72ca0bc41

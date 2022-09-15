@@ -1,9 +1,5 @@
 FROM fletcher_opae_env:latest
 
-# Python 3.9
-RUN dnf install -y python39 python39-pip python39-devel
-RUN alternatives --set python3 /usr/bin/python3.9
-
 # Fletcher runtime
 ARG FLETCHER_VERSION=0.0.22
 ARG ARROW_VERSION=8.0.0
