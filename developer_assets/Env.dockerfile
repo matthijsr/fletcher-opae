@@ -11,9 +11,14 @@ RUN dnf install -y libedit-devel
 RUN dnf install -y libudev-devel
 RUN dnf install -y libcap-devel
 
+RUN dnf install -y autoconf automake bison boost boost-devel libxml2 libxml2-devel ncurses grub2 bc csh flex glibc-locale-source libnsl ncurses-compat-libs 
+RUN localedef -f UTF-8 -i en_US en_US.UTF-8
+
 # Python 3.9
 RUN alternatives --set python3 /usr/bin/python3.9
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
+# Python packages
 RUN python3 -m pip install --user \
         jsonschema \
         virtualenv \
@@ -51,8 +56,6 @@ RUN mkdir -p /installer && \
 ENV MTI_HOME /opt/intelFPGA_pro/quartus_19.2.0b57/modelsim_ase
 ENV QUESTA_HOME "${MTI_HOME}"
 ENV PATH "${MTI_HOME}/bin:${PATH}"
-
-RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Platform Interface Manager
 ARG OFS_REF=2dde2f3f8ad3070694d7ca26e93056f72ca0bc41
