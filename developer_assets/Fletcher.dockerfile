@@ -26,7 +26,7 @@ RUN python3 -m pip install -U pip && \
     python3 -m pip install vhdmmio vhdeps pyarrow==${ARROW_VERSION} && \
     python3 -m pip install https://github.com/matthijsr/fletcher/releases/download/${FLETCHER_VERSION}/pyfletchgen-${FLETCHER_VERSION}-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 
-# # Fletcher plaform support for OPAE
+# Fletcher plaform support for OPAE
 # ARG FLETCHER_OPAE_VERSION=0.2.3
 # RUN mkdir -p /fletcher-opae && \
 #     curl -L https://github.com/matthijsr/fletcher-opae/archive/${FLETCHER_OPAE_VERSION}.tar.gz | tar xz -C /fletcher-opae --strip-components=1 && \
@@ -35,5 +35,13 @@ RUN python3 -m pip install -U pip && \
 #     make -j && \
 #     make install && \
 #     rm -rf /fletcher-opae
+
+# Fletcher plaform support for OPAE (local)
+COPY . /fletcher-opae
+RUN cd /fletcher-opae && \
+    cmake3 -DCMAKE_BUILD_TYPE=Release -DBUILD_FLETCHER_OPAE-ASE=ON -DCMAKE_INSTALL_PREFIX=/usr . && \
+    make -j && \
+    make install && \
+    rm -rf /fletcher-opae
 
 WORKDIR /src
