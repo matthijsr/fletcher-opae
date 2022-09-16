@@ -40,4 +40,10 @@ RUN cd /fletcher-opae && \
     make install && \
     rm -rf /fletcher-opae
 
+# Fix Modelsim on Centos 8 Stream (not necessary for newer versions of Quartus):
+# 1. Force it to use local GCC by removing the built-in GCCs
+RUN rm -rf /opt/intelFPGA_pro/quartus_19.2.0b57/modelsim_ase/gcc-*.*.*-linux
+# 2. Install libstdc++.i686 (dependency)
+RUN dnf install libstdc++.i686
+
 WORKDIR /src
