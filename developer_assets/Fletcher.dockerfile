@@ -23,6 +23,7 @@ RUN python3 -m pip install -U pip && \
     python3 -m pip install https://github.com/matthijsr/fletcher/releases/download/${FLETCHER_VERSION}/pyfletchgen-${FLETCHER_VERSION}-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 
 # Fletcher plaform support for OPAE
+# To fetch specific versions of OPAE: -DFETCH_OPAE=ON -DFETCH_OPAE_TAG=2.0.9-4 -DFETCH_OPAE_SIM_TAG=2.0.10-2 
 # ARG FLETCHER_OPAE_VERSION=0.2.3
 # RUN mkdir -p /fletcher-opae && \
 #     curl -L https://github.com/matthijsr/fletcher-opae/archive/${FLETCHER_OPAE_VERSION}.tar.gz | tar xz -C /fletcher-opae --strip-components=1 && \

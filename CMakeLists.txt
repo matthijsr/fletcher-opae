@@ -28,27 +28,41 @@ if(NOT fletcher_POPULATED)
   add_subdirectory(${fletcher_SOURCE_DIR}/common/c ${fletcher_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
-if(BUILD_FLETCHER_OPAE-ASE)
+set(FETCH_OPAE OFF CACHE BOOL "Whether to use FetchContent to acquire opae. (OFF uses find_package)")
+
+if(FETCH_OPAE)
+  # Newer versions of OPAE (2.1.1-1 onward) install themselves as packages (and use $CMAKE_SOURCE_DIR instead of $CMAKE_CURRENT_SOURCE_DIR to do so), and cannot be fetched.
+  set(FETCH_OPAE_TAG "2.1.0-2" CACHE STRING "Desired branch/tag for opae-sdk")
+
   FetchContent_Declare(opae-c
     GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
-    GIT_TAG         76db48ba3c702185a69663ffe831ee191672b003
+    GIT_TAG         ${FETCH_OPAE_TAG}
   )
-  FetchContent_Declare(opae-c-ase
-    GIT_REPOSITORY  https://github.com/opae/opae-sim.git
-    GIT_TAG         f8e7bd5e876a5b913fb53d6fc85653211eb7af3f
-  )
+
+  if(NOT opae-c_POPULATED)
+    FetchContent_Populate(opae-c)
+    set(OPAE_BUILD_SIM OFF CACHE BOOL "")
+    set(OPAE_WITH_PYBIND11 OFF CACHE BOOL "")
+    add_subdirectory(${opae-c_SOURCE_DIR} ${opae-c_BINARY_DIR} EXCLUDE_FROM_ALL)
+  endif(NOT opae-c_POPULATED)
 else()
-  FetchContent_Declare(opae-c
-    GIT_REPOSITORY  https://github.com/opae/opae-sdk.git
-    GIT_TAG         2.0.11-1
-  )
+  find_package(opae REQUIRED)
+  include(OPAEGit)
+endif(FETCH_OPAE)
+
+if(FETCH_OPAE)
+  # Newer versions of opae-sim use find_package
+  set(FETCH_OPAE_SIM_TAG "2.0.10-2" CACHE STRING "Desired branch/tag for opae-sim")
+else()
+  set(FETCH_OPAE_SIM_TAG "f8e7bd5e876a5b913fb53d6fc85653211eb7af3f" CACHE STRING "Desired branch/tag for opae-sim")
 endif()
-if(NOT opae-c_POPULATED)
-  FetchContent_Populate(opae-c)
-  set(OPAE_BUILD_SIM OFF CACHE BOOL "")
-  # add_subdirectory(${opae-c_SOURCE_DIR} ${opae-c_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
-if(BUILD_FLETCHER_OPAE-ASE AND NOT opae-c-ase_POPULATED)
+
+FetchContent_Declare(opae-c-ase
+  GIT_REPOSITORY  https://github.com/opae/opae-sim.git
+  GIT_TAG         ${FETCH_OPAE_SIM_TAG}
+)
+
+if(BUILD_FLETCHER_OPAE-ASE)
   FetchContent_Populate(opae-c-ase)
   add_subdirectory(${opae-c-ase_SOURCE_DIR} ${opae-c-ase_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
@@ -124,8 +138,8 @@ set(CPACK_PACKAGE_RELOCATABLE ON)
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_DEBIAN_LIBRARY_PACKAGE_NAME "${CMAKE_PROJECT_NAME}")
 set(CPACK_DEBIAN_FILE_NAME "DEB-DEFAULT")
-set(CPACK_DEBIAN_LIBRARY_PACKAGE_DEPENDS "fletcher (>= 0.0.22), opae-libs (>= 2.2.0)")
-set(CPACK_DEBIAN_ASE_PACKAGE_DEPENDS "fletcher (>= 0.0.20), opae-ase (>= 2.0.10)")
+set(CPACK_DEBIAN_LIBRARY_PACKAGE_DEPENDS "fletcher (>= 0.0.22), opae-libs (>= 2.0.11)")
+set(CPACK_DEBIAN_ASE_PACKAGE_DEPENDS "fletcher (>= 0.0.22), opae-ase (>= 2.0.10)")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR}")
 
 set(CPACK_RPM_COMPONENT_INSTALL ON)
