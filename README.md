@@ -4,7 +4,7 @@
 
 ## Information
 
-- [Documentation](https://teratide.github.io/fletcher-opae)
+- [Documentation](https://matthijsr.github.io/fletcher-opae)
 - [Fletcher](https://github.com/abs-tudelft/fletcher)
 - [OPAE](https://opae.github.io/)
 

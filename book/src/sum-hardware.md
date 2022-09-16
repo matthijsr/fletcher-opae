@@ -8,7 +8,7 @@ Start by running a new container.
 
 ```
 cd fletcher-opae/examples/sum
-docker run -it --rm --name ias --net=host -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --name fletcher_opae --net=host -v `pwd`:/src:ro fletcher_opae:latest
 ```
 
 Create the synthesis environment and generate the bitstream.
@@ -29,7 +29,7 @@ Start a new shell and copy the resulting unsigned bitstream to your local machin
 
 ```
 cd fletcher-opae/examples/sum
-docker cp ias:/synth/sum_unsigned.gbs .
+docker cp fletcher_opae:/synth/sum_unsigned.gbs .
 ```
 
 ## Flash the bistream
@@ -38,7 +38,7 @@ To flash the bistream start new [privileged](https://docs.docker.com/engine/refe
 
 ```
 cd fletcher-opae/examples/sum
-docker run -it --rm --privileged -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --privileged -v `pwd`:/src:ro fletcher_opae:latest
 ```
 
 Flash the bitstream using `fpgaconf`.
@@ -53,7 +53,7 @@ Start a new container with [access to the device](https://docs.docker.com/engine
 
 ```
 cd fletcher-opae/examples/sum
-docker run -it --rm --device /dev/intel-fpga-port.0 -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --device /dev/intel-fpga-port.0 -v `pwd`:/src:ro fletcher_opae:latest
 ```
 
 Build the host application. It's important to use a release build to disable simulation mode.

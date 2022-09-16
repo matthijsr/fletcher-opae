@@ -28,7 +28,7 @@ Start by starting a new container from the root of the example.
 
 ```
 cd fletcher-opae/examples/primmap/
-docker run -it --rm -v `pwd`:/src ias:1.2.1
+docker run -it --rm -v `pwd`:/src fletcher_opae:latest
 ```
 
 Generate an input recordbatch file and the output schema using the provided `generate.py` Python script.
