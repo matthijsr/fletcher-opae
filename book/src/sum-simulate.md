@@ -6,7 +6,7 @@ Start by starting a new container for simulation:
 
 ```
 cd fletcher-opae/examples/sum
-docker run -it --rm --name ias -e DISPLAY -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --name ias -e DISPLAY -v `pwd`:/src:ro fletcher_opae:latest
 ```
 
 ## Start simulation
