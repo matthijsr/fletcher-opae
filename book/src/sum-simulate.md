@@ -6,7 +6,7 @@ Start by starting a new container for simulation:
 
 ```
 cd fletcher-opae/examples/sum
-docker run -it --rm --name ias -e DISPLAY -v `pwd`:/src:ro fletcher_opae:latest
+docker run -it --rm --name fletcher_opae -e DISPLAY -v `pwd`:/src:ro fletcher_opae:latest
 ```
 
 ## Start simulation
@@ -28,7 +28,7 @@ make sim
 Start another shell in the running container.
 
 ```
-docker exec -it ias bash
+docker exec -it fletcher_opae bash
 ```
 
 Build the host application.

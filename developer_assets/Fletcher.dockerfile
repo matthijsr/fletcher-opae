@@ -24,22 +24,22 @@ RUN python3 -m pip install -U pip && \
 
 # Fletcher plaform support for OPAE
 # To fetch specific versions of OPAE: -DFETCH_OPAE=ON -DFETCH_OPAE_TAG=2.0.9-4 -DFETCH_OPAE_SIM_TAG=2.0.10-2 
-# ARG FLETCHER_OPAE_VERSION=0.2.3
-# RUN mkdir -p /fletcher-opae && \
-#     curl -L https://github.com/matthijsr/fletcher-opae/archive/${FLETCHER_OPAE_VERSION}.tar.gz | tar xz -C /fletcher-opae --strip-components=1 && \
-#     cd /fletcher-opae && \
-#     cmake3 -DCMAKE_BUILD_TYPE=Release -DBUILD_FLETCHER_OPAE-ASE=ON -DCMAKE_INSTALL_PREFIX=/usr . && \
-#     make -j && \
-#     make install && \
-#     rm -rf /fletcher-opae
-
-# Fletcher plaform support for OPAE (local)
-COPY . /fletcher-opae
-RUN cd /fletcher-opae && \
+ARG FLETCHER_OPAE_VERSION=0.2.3
+RUN mkdir -p /fletcher-opae && \
+    curl -L https://github.com/matthijsr/fletcher-opae/archive/${FLETCHER_OPAE_VERSION}.tar.gz | tar xz -C /fletcher-opae --strip-components=1 && \
+    cd /fletcher-opae && \
     cmake3 -DCMAKE_BUILD_TYPE=Release -DBUILD_FLETCHER_OPAE-ASE=ON -DCMAKE_INSTALL_PREFIX=/usr . && \
     make -j && \
     make install && \
     rm -rf /fletcher-opae
+
+# # Fletcher plaform support for OPAE (local)
+# COPY . /fletcher-opae
+# RUN cd /fletcher-opae && \
+#     cmake3 -DCMAKE_BUILD_TYPE=Release -DBUILD_FLETCHER_OPAE-ASE=ON -DCMAKE_INSTALL_PREFIX=/usr . && \
+#     make -j && \
+#     make install && \
+#     rm -rf /fletcher-opae
 
 # Fix Modelsim on Centos 8 Stream (not necessary for newer versions of Quartus):
 # 1. Force it to use local GCC by removing the built-in GCCs

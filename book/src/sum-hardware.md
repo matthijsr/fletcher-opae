@@ -8,7 +8,7 @@ Start by running a new container.
 
 ```
 cd fletcher-opae/examples/sum
-docker run -it --rm --name ias --net=host -v `pwd`:/src:ro fletcher_opae:latest
+docker run -it --rm --name fletcher_opae --net=host -v `pwd`:/src:ro fletcher_opae:latest
 ```
 
 Create the synthesis environment and generate the bitstream.
@@ -29,7 +29,7 @@ Start a new shell and copy the resulting unsigned bitstream to your local machin
 
 ```
 cd fletcher-opae/examples/sum
-docker cp ias:/synth/sum_unsigned.gbs .
+docker cp fletcher_opae:/synth/sum_unsigned.gbs .
 ```
 
 ## Flash the bistream
