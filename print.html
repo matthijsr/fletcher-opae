@@ -264,16 +264,17 @@ intel_fpga_pci         26500  2 intel_fpga_afu,intel_fpga_fme
 <h1><a class="header" href="#development-environment-setup" id="development-environment-setup">Development environment setup</a></h1>
 <p>This subsection describes how to build the development environment image for this project.</p>
 <h2><a class="header" href="#get-the-dockerfile" id="get-the-dockerfile">Get the Dockerfile</a></h2>
-<p>Download the <a href="https://github.com/teratide/fletcher-opae/blob/master/Dockerfile">Dockerfile</a> or clone the <a href="https://github.com/teratide/fletcher-opae">repository</a>.</p>
-<pre><code>git clone https://github.com/teratide/fletcher-opae
+<p>Download the <a href="https://github.com/matthijsr/fletcher-opae/blob/master/Dockerfile">Dockerfile</a> or clone the <a href="https://github.com/matthijsr/fletcher-opae">repository</a>.</p>
+<pre><code>git clone https://github.com/matthijsr/fletcher-opae
 cd fletcher-opae/
 </code></pre>
 <h2><a class="header" href="#build-the-image" id="build-the-image">Build the image.</a></h2>
-<pre><code>docker build -t ias:1.2.1 - &lt; Dockerfile
+<pre><code>chmod +x setup_docker.sh
+./setup_docker.sh
 </code></pre>
 <p>That's it.</p>
 <h1><a class="header" href="#sum-example" id="sum-example">Sum example</a></h1>
-<p>This section explains how to use the <a href="https://github.com/teratide/fletcher-opae/tree/master/examples/sum">sum example</a>.</p>
+<p>This section explains how to use the <a href="https://github.com/matthijsr/fletcher-opae/tree/master/examples/sum">sum example</a>.</p>
 <h1><a class="header" href="#prepare" id="prepare">Prepare</a></h1>
 <h2><a class="header" href="#project-structure" id="project-structure">Project structure</a></h2>
 <p>Like most Fletcher projects, this example project contains software (host application) and hardware (accelerator functional unit) sources.</p>
@@ -300,7 +301,7 @@ cd fletcher-opae/
 <p>The first step is to use <a href="https://github.com/abs-tudelft/fletcher"><code>fletchgen</code></a> to generate the required hardware to wrap the sum kernel.</p>
 <p>Start by starting a new container from the root of the example.</p>
 <pre><code>cd fletcher-opae/examples/sum/
-docker run -it --rm -v `pwd`:/src ias:1.2.1
+docker run -it --rm -v `pwd`:/src fletcher_opae:latest
 </code></pre>
 <p>Generate an input recordbatch file using the provided <code>generate-input.py</code> Python script.</p>
 <pre><code>python3 generate-input.py
@@ -318,7 +319,7 @@ fletchgen -n Sum -r example.rb -l vhdl --mmio64 --mmio-offset 64 --axi
 <p>This subsection shows how to run hardware/software co-simulation using <a href="https://github.com/OPAE/opae-sim">OPAE ASE</a>.</p>
 <p>Start by starting a new container for simulation:</p>
 <pre><code>cd fletcher-opae/examples/sum
-docker run -it --rm --name ias -e DISPLAY -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --name fletcher_opae -e DISPLAY -v `pwd`:/src:ro fletcher_opae:latest
 </code></pre>
 <h2><a class="header" href="#start-simulation" id="start-simulation">Start simulation</a></h2>
 <pre><code>afu_sim_setup -s /src/hw/sources.txt /sim
@@ -330,7 +331,7 @@ make
 </code></pre>
 <h2><a class="header" href="#start-host-application" id="start-host-application">Start host application</a></h2>
 <p>Start another shell in the running container.</p>
-<pre><code>docker exec -it ias bash
+<pre><code>docker exec -it fletcher_opae bash
 </code></pre>
 <p>Build the host application.</p>
 <pre><code>mkdir -p /build
@@ -352,7 +353,7 @@ make wave
 <h2><a class="header" href="#synthesis" id="synthesis">Synthesis</a></h2>
 <p>Start by running a new container.</p>
 <pre><code>cd fletcher-opae/examples/sum
-docker run -it --rm --name ias --net=host -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --name fletcher_opae --net=host -v `pwd`:/src:ro fletcher_opae:latest
 </code></pre>
 <p>Create the synthesis environment and generate the bitstream.</p>
 <pre><code>afu_synth_setup -s /src/hw/sources.txt /synth
@@ -364,12 +365,12 @@ ${OPAE_PLATFORM_ROOT}/bin/run.sh
 </code></pre>
 <p>Start a new shell and copy the resulting unsigned bitstream to your local machine.</p>
 <pre><code>cd fletcher-opae/examples/sum
-docker cp ias:/synth/sum_unsigned.gbs .
+docker cp fletcher_opae:/synth/sum_unsigned.gbs .
 </code></pre>
 <h2><a class="header" href="#flash-the-bistream" id="flash-the-bistream">Flash the bistream</a></h2>
 <p>To flash the bistream start new <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities">privileged</a> container to access the FPGA.</p>
 <pre><code>cd fletcher-opae/examples/sum
-docker run -it --rm --privileged -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --privileged -v `pwd`:/src:ro fletcher_opae:latest
 </code></pre>
 <p>Flash the bitstream using <code>fpgaconf</code>.</p>
 <pre><code>fpgaconf sum_unsigned.gbs
@@ -377,7 +378,7 @@ docker run -it --rm --privileged -v `pwd`:/src:ro ias:1.2.1
 <h2><a class="header" href="#run-the-host-application" id="run-the-host-application">Run the host application</a></h2>
 <p>Start a new container with <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities">access to the device</a>.</p>
 <pre><code>cd fletcher-opae/examples/sum
-docker run -it --rm --device /dev/intel-fpga-port.0 -v `pwd`:/src:ro ias:1.2.1
+docker run -it --rm --device /dev/intel-fpga-port.0 -v `pwd`:/src:ro fletcher_opae:latest
 </code></pre>
 <p>Build the host application. It's important to use a release build to disable simulation mode.</p>
 <pre><code>mkdir -p /build
@@ -390,7 +391,7 @@ make
 </code></pre>
 <p>The result should be -6.</p>
 <h1><a class="header" href="#primmap-example" id="primmap-example">Primmap example</a></h1>
-<p>This section explains how to use the <a href="https://github.com/teratide/fletcher-opae/tree/master/examples/primmap">primmap example</a>.</p>
+<p>This section explains how to use the <a href="https://github.com/matthijsr/fletcher-opae/tree/master/examples/primmap">primmap example</a>.</p>
 <p>This example read from an input recordbatch with numbers, adds one to all the values, and writes these values to an output recordbatch in host memory.</p>
 <h1><a class="header" href="#prepare-1" id="prepare-1">Prepare</a></h1>
 <h2><a class="header" href="#project-structure-1" id="project-structure-1">Project structure</a></h2>
@@ -419,7 +420,7 @@ make
 <p>The first step is to use <a href="https://github.com/abs-tudelft/fletcher"><code>fletchgen</code></a> to generate the required hardware to wrap the sum kernel.</p>
 <p>Start by starting a new container from the root of the example.</p>
 <pre><code>cd fletcher-opae/examples/primmap/
-docker run -it --rm -v `pwd`:/src ias:1.2.1
+docker run -it --rm -v `pwd`:/src fletcher_opae:latest
 </code></pre>
 <p>Generate an input recordbatch file and the output schema using the provided <code>generate.py</code> Python script.</p>
 <pre><code>python3 generate.py

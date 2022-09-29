@@ -166,12 +166,13 @@
                         <h1><a class="header" href="#development-environment-setup" id="development-environment-setup">Development environment setup</a></h1>
 <p>This subsection describes how to build the development environment image for this project.</p>
 <h2><a class="header" href="#get-the-dockerfile" id="get-the-dockerfile">Get the Dockerfile</a></h2>
-<p>Download the <a href="https://github.com/teratide/fletcher-opae/blob/master/Dockerfile">Dockerfile</a> or clone the <a href="https://github.com/teratide/fletcher-opae">repository</a>.</p>
-<pre><code>git clone https://github.com/teratide/fletcher-opae
+<p>Download the <a href="https://github.com/matthijsr/fletcher-opae/blob/master/Dockerfile">Dockerfile</a> or clone the <a href="https://github.com/matthijsr/fletcher-opae">repository</a>.</p>
+<pre><code>git clone https://github.com/matthijsr/fletcher-opae
 cd fletcher-opae/
 </code></pre>
 <h2><a class="header" href="#build-the-image" id="build-the-image">Build the image.</a></h2>
-<pre><code>docker build -t ias:1.2.1 - &lt; Dockerfile
+<pre><code>chmod +x setup_docker.sh
+./setup_docker.sh
 </code></pre>
 <p>That's it.</p>
 

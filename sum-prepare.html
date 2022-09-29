@@ -189,7 +189,7 @@
 <p>The first step is to use <a href="https://github.com/abs-tudelft/fletcher"><code>fletchgen</code></a> to generate the required hardware to wrap the sum kernel.</p>
 <p>Start by starting a new container from the root of the example.</p>
 <pre><code>cd fletcher-opae/examples/sum/
-docker run -it --rm -v `pwd`:/src ias:1.2.1
+docker run -it --rm -v `pwd`:/src fletcher_opae:latest
 </code></pre>
 <p>Generate an input recordbatch file using the provided <code>generate-input.py</code> Python script.</p>
 <pre><code>python3 generate-input.py
