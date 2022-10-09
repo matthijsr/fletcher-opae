@@ -1,5 +1,5 @@
 [book]
-authors = ["Matthijs Brobbel"]
+authors = ["Matthijs Brobbel", "Matthijs Reukers"]
 language = "en"
 multilingual = false
 src = "src"

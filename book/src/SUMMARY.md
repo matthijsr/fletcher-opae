@@ -4,6 +4,7 @@
 - [Setup](./setup.md)
   - [Host system setup](./host-system-setup.md)
   - [Development environment setup](./dev-env-setup.md)
+  - [Using `vhdmmio`](./vhdmmio-setup.md)
 - [Sum example](./sum-example.md)
   - [Prepare](./sum-prepare.md)
   - [Simulate](./sum-simulate.md)
