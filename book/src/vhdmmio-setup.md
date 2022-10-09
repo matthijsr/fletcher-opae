@@ -4,7 +4,7 @@
 
 ## Default behavior
 
-By default, fletchgen will generate a `fletchgen.mmio.yaml` file for the design and call `vhdmmio`, provided you use the `--mmio` flag and set the `--mmio-offset` argument, e.g.:
+By default, fletchgen will generate a `fletchgen.mmio.yaml` file for the design and call `vhdmmio`, provided you use the `--mmio64` flag and set the `--mmio-offset` argument, e.g.:
 
 ```bash
 fletchgen -n Sum -r example.rb -l vhdl --mmio64 --mmio-offset 64 --axi
