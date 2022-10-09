@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Host system setup - Fletcher platform support for OPAE</title>
+        <title>Using vhdmmio - Fletcher platform support for OPAE</title>
         
         
 
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="host-system-setup.html" class="active"><strong aria-hidden="true">2.1.</strong> Host system setup</a></li><li class="chapter-item expanded "><a href="dev-env-setup.html"><strong aria-hidden="true">2.2.</strong> Development environment setup</a></li><li class="chapter-item expanded "><a href="vhdmmio-setup.html"><strong aria-hidden="true">2.3.</strong> Using vhdmmio</a></li></ol></li><li class="chapter-item expanded "><a href="sum-example.html"><strong aria-hidden="true">3.</strong> Sum example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sum-prepare.html"><strong aria-hidden="true">3.1.</strong> Prepare</a></li><li class="chapter-item expanded "><a href="sum-simulate.html"><strong aria-hidden="true">3.2.</strong> Simulate</a></li><li class="chapter-item expanded "><a href="sum-hardware.html"><strong aria-hidden="true">3.3.</strong> Hardware</a></li></ol></li><li class="chapter-item expanded "><a href="primmap-example.html"><strong aria-hidden="true">4.</strong> Primmap example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="primmap-prepare.html"><strong aria-hidden="true">4.1.</strong> Prepare</a></li><li class="chapter-item expanded "><a href="primmap-use.html"><strong aria-hidden="true">4.2.</strong> Use</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="setup.html"><strong aria-hidden="true">2.</strong> Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="host-system-setup.html"><strong aria-hidden="true">2.1.</strong> Host system setup</a></li><li class="chapter-item expanded "><a href="dev-env-setup.html"><strong aria-hidden="true">2.2.</strong> Development environment setup</a></li><li class="chapter-item expanded "><a href="vhdmmio-setup.html" class="active"><strong aria-hidden="true">2.3.</strong> Using vhdmmio</a></li></ol></li><li class="chapter-item expanded "><a href="sum-example.html"><strong aria-hidden="true">3.</strong> Sum example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sum-prepare.html"><strong aria-hidden="true">3.1.</strong> Prepare</a></li><li class="chapter-item expanded "><a href="sum-simulate.html"><strong aria-hidden="true">3.2.</strong> Simulate</a></li><li class="chapter-item expanded "><a href="sum-hardware.html"><strong aria-hidden="true">3.3.</strong> Hardware</a></li></ol></li><li class="chapter-item expanded "><a href="primmap-example.html"><strong aria-hidden="true">4.</strong> Primmap example</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="primmap-prepare.html"><strong aria-hidden="true">4.1.</strong> Prepare</a></li><li class="chapter-item expanded "><a href="primmap-use.html"><strong aria-hidden="true">4.2.</strong> Use</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,81 +163,71 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#host-system-setup" id="host-system-setup">Host system setup</a></h1>
-<p>This subsection describes the required setup steps for the host system.</p>
-<h2><a class="header" href="#docker" id="docker">Docker</a></h2>
-<p>The development environment is based on a <a href="https://www.docker.com/">Docker</a> image provided by this project. It includes all the required tools and components to:</p>
-<ul>
-<li>Generate Fletcher projects
-<ul>
-<li>fletchgen</li>
-<li>vhdmmio</li>
-<li>pyarrow</li>
-</ul>
-</li>
-<li>Build Fletcher projects
-<ul>
-<li>C++11 compiler</li>
-<li>Apache Arrow 1.0+</li>
-</ul>
-</li>
-<li>Hardware/software co-simulation
-<ul>
-<li>Modelsim</li>
-<li>OPAE ASE</li>
-</ul>
-</li>
-<li>Generate bistreams
-<ul>
-<li>Quartus</li>
-<li>Updated Platform Interface Manager</li>
-<li>PACsign</li>
-</ul>
-</li>
-<li>Update bitstream on FPPGA
-<ul>
-<li>fpgaconf</li>
-</ul>
-</li>
-<li>Run on hardware
-<ul>
-<li>Fletcher runtime</li>
-<li>Fletcher OPAE platform support</li>
-<li>OPAE library</li>
-</ul>
-</li>
-</ul>
-<p><a href="https://docs.docker.com/engine/install/centos/">Install</a> the latest stable version of Docker.</p>
-<h2><a class="header" href="#driver" id="driver">Driver</a></h2>
-<p>If you have access to a supported device and want to run on hardware start by installing the <a href="https://github.com/OPAE/opae-sdk/releases/download/1.4.0-1/opae-intel-fpga-driver-2.0.4-2.x86_64.rpm">Intel FPGA driver</a>.</p>
-<pre><code>sudo yum install -y https://github.com/OPAE/opae-sdk/releases/download/1.4.0-1/opae-intel-fpga-driver-2.0.4-2.x86_64.rpm
+                        <h1><a class="header" href="#using-vhdmmio" id="using-vhdmmio">Using <code>vhdmmio</code></a></h1>
+<p><a href="https://github.com/abs-tudelft/vhdmmio"><code>vhdmmio</code></a> generates the MMIO interfaces for the design based on YAML files.</p>
+<h2><a class="header" href="#default-behavior" id="default-behavior">Default behavior</a></h2>
+<p>By default, fletchgen will generate a <code>fletchgen.mmio.yaml</code> file for the design and call <code>vhdmmio</code>, provided you use the <code>--mmio</code> flag and set the <code>--mmio-offset</code> argument, e.g.:</p>
+<pre><code class="language-bash">fletchgen -n Sum -r example.rb -l vhdl --mmio64 --mmio-offset 64 --axi
 </code></pre>
-<p>Validate that the driver installed successfully and is loaded.</p>
-<pre><code>$ lsmod | grep fpga
-intel_fpga_pac_hssi    24389  0
-intel_fpga_fme         87452  0
-intel_fpga_afu         36165  0
-ifpga_sec_mgr          13757  1 intel_fpga_fme
-fpga_mgr_mod           14812  1 intel_fpga_fme
-intel_fpga_pci         26500  2 intel_fpga_afu,intel_fpga_fme
+<h2><a class="header" href="#targeting-intel-fpgas" id="targeting-intel-fpgas">Targeting Intel FPGAs</a></h2>
+<h3><a class="header" href="#accelerator-uuid" id="accelerator-uuid">Accelerator UUID</a></h3>
+<p>Intel requires that <a href="https://www.intel.com/content/www/us/en/docs/programmable/683129/1-2-and-2-0-1/specify-the-afu-s-uuid.html">an AFU features an accelerator UUID</a>, which is specified by your <code>afu-image:accelerator-clusters:accelerator-type-uuid</code> property in the <code>&lt;design&gt;.json</code> file.</p>
+<p>The UUID is not derived from anything, it simply needs to be unique, so can be randomly generated (using <code>uuidgen</code>, for example).</p>
+<h3><a class="header" href="#afu-csr-definitions" id="afu-csr-definitions">AFU CSR Definitions</a></h3>
+<p><a href="https://www.intel.com/content/www/us/en/docs/programmable/683193/current/mandatory-csr-definitions.html">AFUs should implement five control status registers</a>, <code>DEV_FEATURE_HDR</code> (<code>DFH</code>), <code>AFU_ID_L</code>, <code>AFU_ID_H</code>, <code>DFH_RSVD0</code>, and <code>DFH_RSVD1</code>. (Also see <a href="https://www.intel.com/content/www/us/en/docs/programmable/683190/1-3-1/hello-afu-example-pll.html">Intel's own example</a>)</p>
+<p>Fletchgen does not include these in <code>fletchgen.mmio.yaml</code>, as these are Intel-specific registers.</p>
+<p>To specify them, we can add <code>behavior: constant</code> fields to first addresses of the generated <code>fletchgen.mmio.yaml</code>, containing their values. It would be a good idea to create a separate <code>&lt;design&gt;.mmio.yml</code> file and include it in version control (while still excluding any generated files).</p>
+<p>See <a href="https://github.com/matthijsr/fletcher-opae/blob/8c5133b77d4af6f04994df9b89ca3c2175127046/examples/sum/hw/sum.mmio.yml#L18-L41"><code>sum.mmio.yml</code></a> as an example:</p>
+<pre><code class="language-yaml">  - address: 0b0---
+    name: AFU_DFH
+    behavior: constant
+    value: 17293826967149215744 # [63:60]: 1 &amp;&amp; [40]: 1
+
+  - address: 0b1---
+    name: AFU_ID_L
+    behavior: constant
+    value: 13797985263751972578 # check sum.json
+
+  - address: 0b10---
+    name: AFU_ID_H
+    behavior: constant
+    value: 13609688667197753651 # check sum.json
+  
+  - address: 0b11---
+    name: DFH_RSVD0
+    behavior: constant
+    value: 0
+
+  - address: 0b100---
+    name: DFH_RSVD1
+    behavior: constant
+    value: 0
 </code></pre>
-<h2><a class="header" href="#updating-the-fim-and-bmc-firmware" id="updating-the-fim-and-bmc-firmware">Updating the FIM and BMC firmware</a></h2>
-<blockquote>
-<p>TODO</p>
-</blockquote>
+<p>Their specific values can be set as follows:</p>
+<ul>
+<li><code>AFU_DFH</code> can remain <code>17293826967149215744</code>. This simply sets <code>[63:60]</code> to be <code>1</code>, identifying the device as an AFU, and <code>[40]</code> to be <code>1</code>, identifying this as the last header.</li>
+<li><code>AFU_ID_L</code> should be the <em>lower</em> 64 bits of the 128-bit UUID specified in your <code>&lt;design&gt;.json</code>. Simply convert it to binary, then convert those 64 bits to an unsigned integer for <code>vhdmmio</code>.</li>
+<li><code>AFU_ID_H</code> then contains the <em>upper</em> 64 bits of the UUID.</li>
+<li><code>DFH_RSVD0</code> and <code>DFH_RSVD1</code> are reserved, and unused. The value can be set to <code>0</code>.</li>
+</ul>
+<p>Note that the chosen <code>name</code>s are irrelevant, only the <code>address</code>es matter.</p>
+<p>After creating your custom <code>&lt;design&gt;.mmio.yml</code>, manually run</p>
+<pre><code class="language-bash">vhdmmio -V vhdl -P vhdl &lt;design&gt;.mmio.yml
+</code></pre>
+<p>in order to generate the proper MMIO interfaces for your AFU.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="dev-env-setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="dev-env-setup.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="sum-example.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -249,13 +239,13 @@ intel_fpga_pci         26500  2 intel_fpga_afu,intel_fpga_fme
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="dev-env-setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="dev-env-setup.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="sum-example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
