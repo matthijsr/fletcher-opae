@@ -276,7 +276,7 @@ cd fletcher-opae/
 <h1><a class="header" href="#using-vhdmmio" id="using-vhdmmio">Using <code>vhdmmio</code></a></h1>
 <p><a href="https://github.com/abs-tudelft/vhdmmio"><code>vhdmmio</code></a> generates the MMIO interfaces for the design based on YAML files.</p>
 <h2><a class="header" href="#default-behavior" id="default-behavior">Default behavior</a></h2>
-<p>By default, fletchgen will generate a <code>fletchgen.mmio.yaml</code> file for the design and call <code>vhdmmio</code>, provided you use the <code>--mmio</code> flag and set the <code>--mmio-offset</code> argument, e.g.:</p>
+<p>By default, fletchgen will generate a <code>fletchgen.mmio.yaml</code> file for the design and call <code>vhdmmio</code>, provided you use the <code>--mmio64</code> flag and set the <code>--mmio-offset</code> argument, e.g.:</p>
 <pre><code class="language-bash">fletchgen -n Sum -r example.rb -l vhdl --mmio64 --mmio-offset 64 --axi
 </code></pre>
 <h2><a class="header" href="#targeting-intel-fpgas" id="targeting-intel-fpgas">Targeting Intel FPGAs</a></h2>
